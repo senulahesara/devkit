@@ -1,6 +1,6 @@
 "use client";
 
-import { Book, BookOpen, CodeXml, FileText, Layers, Menu, Sunset, Trees, Zap } from "lucide-react";
+import { BookOpen, CodeXml, FileText, Layers, Menu } from "lucide-react";
 
 import {
   Accordion,
@@ -63,25 +63,25 @@ const Navbar1 = ({
       items: [
         {
           title: "Regex Playground",
-          description: "Test and debug regular expressions with real-time matching",
+          description: "Test regex with live results",
           icon: <CodeXml className="size-5 shrink-0" />,
           url: "#",
         },
         {
           title: "JSON/YAML Formatter",
-          description: "Format, validate and beautify JSON and YAML data",
+          description: "Format and validate JSON/YAML",
           icon: <FileText className="size-5 shrink-0" />,
           url: "#",
         },
         {
           title: "Boilerplate Generator",
-          description: "Generate starter templates for various project types",
+          description: "Generate starter project templates",
           icon: <Layers className="size-5 shrink-0" />,
           url: "#",
         },
         {
           title: "Developer Cheat Sheets",
-          description: "Quick reference for Git commands and Linux basics",
+          description: "Quick Git and Linux reference",
           icon: <BookOpen className="size-5 shrink-0" />,
           url: "#",
         },
@@ -89,10 +89,6 @@ const Navbar1 = ({
     },
   ],
 
-  auth = {
-    login: { title: "Login", url: "#" },
-    signup: { title: "Sign up", url: "#" },
-  },
 }: Navbar1Props) => {
   return (
     <header className="fixed top-0 left-0 w-full z-50 border-b bg-white/70 dark:bg-background">
@@ -114,11 +110,7 @@ const Navbar1 = ({
 
         {/* Auth Buttons */}
         <div className="hidden lg:flex gap-2">
-          
-<GitHubStarButton />
-
-
-          
+          <GitHubStarButton />
         </div>
 
         {/* Mobile Menu */}
@@ -130,6 +122,7 @@ const Navbar1 = ({
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-72 sm:w-80">
+
               <SheetHeader>
                 <SheetTitle>
                   <a href={logo.url} className="flex items-center gap-2">
@@ -147,22 +140,16 @@ const Navbar1 = ({
                     </div>
                   ))}
                 </Accordion>
-
                 <div className="flex flex-col gap-3">
-                  <Button asChild variant="outline">
-                    <a href={auth.login.url}>{auth.login.title}</a>
-                  </Button>
-                  <Button asChild>
-                    <a href={auth.signup.url}>{auth.signup.title}</a>
-                  </Button>
+                  <GitHubStarButton />
                 </div>
               </div>
+
             </SheetContent>
           </Sheet>
         </div>
       </div>
     </header>
-
   );
 };
 

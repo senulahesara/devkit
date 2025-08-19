@@ -10,7 +10,7 @@ const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 export function GitHubStarButton() {
   const { data } = useSWR<StarsResponse>(
-    "/api/github/stars?owner=senulahesara&repo=LMS",
+    "/api/github/stars?owner=senulahesara&repo=devkit",
     fetcher,
     { revalidateOnFocus: false }
   );
@@ -25,7 +25,7 @@ export function GitHubStarButton() {
 
   return (
     <a
-      href="https://github.com/senulahesara/LMS"
+      href="https://github.com/senulahesara/devkit"
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Star senulahesara/lms on GitHub"
@@ -44,7 +44,7 @@ export function GitHubStarButton() {
         />
       </svg>
 
-      <span className="mr-2">Star</span>
+      <span className="mr-2">Star on Github</span>
 
       {/* star icon that reacts on hover */}
       <svg
