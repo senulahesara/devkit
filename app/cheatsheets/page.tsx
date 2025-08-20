@@ -2,7 +2,7 @@
 import { Navbar1 } from "@/components/navbar1";
 import { StackedCircularFooter } from "@/components/ui/stacked-circular-footer";
 import { RegexPlayground } from "@/components/regex-playground";
-import { Code2, HelpCircle } from "lucide-react";
+import { BookOpen, Code2, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -21,6 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { CheatSheets } from "@/components/cheat-sheets";
 
 export default function RegexPage() {
   return (
@@ -33,18 +34,18 @@ export default function RegexPage() {
             {/* Header */}
             <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
               <div className="p-2 rounded-xl bg-white/10">
-                <Code2 className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" />
+                <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 text-orange-400" />
               </div>
               <h1 className="text-2xl sm:text-3xl font-bold text-white">
-                Regex Playground
+                Developer Cheat Sheets
               </h1>
             </div>
             <p className="text-gray-300 text-sm sm:text-base mb-4 sm:mb-6">
-              Test and debug regular expressions with real-time matching and highlighting
+              Quick reference for Git commands and Linux basics in Sinhala and English
             </p>
 
             {/* The actual playground */}
-            <RegexPlayground />
+            <CheatSheets />
           </div>
         </main>
       </div>

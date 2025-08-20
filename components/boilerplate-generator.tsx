@@ -17,7 +17,7 @@ import { Badge } from "./ui/badge"
 interface ProjectConfig { name: string; description: string }
 type SelectedFeatures = Record<string, boolean>
 type FileGenerator = (config: ProjectConfig, features: SelectedFeatures) => string
-interface Addon { id: string; name: string; description: string }
+interface Addon { id: string; name: string; description: string; files?: Record<string, FileGenerator>; packages?: any }
 interface ProjectTemplate {
   id: string
   name: string
@@ -108,7 +108,7 @@ const templates: ProjectTemplate[] = [
     id: "laravel",
     name: "PHP Laravel",
     description: "The PHP framework for web artisans",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-plain.svg",
+    icon: "https://static.cdnlogo.com/logos/l/23/laravel.svg",
     addons: [
       { id: "pint", name: "Pint", description: "PHP code style fixer.", files: { "pint.json": () => JSON.stringify({ preset: "laravel" }, null, 2) }, packages: { devDependencies: { "laravel/pint": "^1.0" } } },
       { id: "docker", name: "Dockerfile", description: "Containerize your application.", files: { "Dockerfile": () => `FROM php:8.2-fpm\n# Basic setup...\nCOPY . /var/www\n# You'll need to configure Nginx/Apache` } },
@@ -230,7 +230,7 @@ export function BoilerplateGenerator() {
             </CardContent>
           </Card>
           {currentTemplate?.addons && <Card>
-            <CardHeader><CardTitle className="flex items-center gap-2"><Zap className="w-5 h-5 text-yellow-400" /> Optional Add-ons</CardTitle><CardDescription>Power-up your project.</CardDescription></CardHeader>
+            <CardHeader><CardTitle className="flex items-center gap-2"><Zap className="w-5 h-5" /> Optional Add-ons</CardTitle><CardDescription>Power-up your project.</CardDescription></CardHeader>
             <CardContent className="space-y-4">
               {currentTemplate.addons.map(a => <div key={a.id} className="flex items-start space-x-3 rounded-md border p-3">
                 <Checkbox id={a.id} checked={!!selectedFeatures[a.id]} onCheckedChange={() => handleFeatureToggle(a.id)} className="mt-1" /><div className="grid gap-1.5 leading-none"><label htmlFor={a.id} className="font-medium">{a.name}</label><p className="text-sm text-muted-foreground">{a.description}</p></div>
