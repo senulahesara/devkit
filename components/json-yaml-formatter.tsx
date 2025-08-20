@@ -1,13 +1,27 @@
 "use client"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useRef } from "react"
 import type React from "react"
-
+import YAML from "js-yaml"
+import CodeMirror from "@uiw/react-codemirror"
+import { json } from "@codemirror/lang-json"
+import { yaml } from "@codemirror/lang-yaml"
+import { githubDark } from "@uiw/codemirror-theme-github"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+
 import {
   Copy,
   Check,
@@ -15,79 +29,12 @@ import {
   Upload,
   ArrowRightLeft,
   Minimize2,
-  Maximize2,
   AlertCircle,
   CheckCircle,
+  Trash2,
+  Loader2,
+  Link,
 } from "lucide-react"
-import { Label } from "@/components/ui/label"
-
-// Simple YAML parser/stringifier (basic implementation)
-const parseYAML = (yamlString: string): any => {
-  try {
-    // This is a very basic YAML parser - in a real app you'd use a proper library
-    const lines = yamlString.trim().split("\n")
-    const result: any = {}
-    let currentKey = ""
-
-    for (const line of lines) {
-      const trimmed = line.trim()
-      if (!trimmed || trimmed.startsWith("#")) continue
-
-      if (trimmed.includes(":")) {
-        const [key, ...valueParts] = trimmed.split(":")
-        const value = valueParts.join(":").trim()
-
-        if (value === "") {
-          currentKey = key.trim()
-          result[currentKey] = {}
-        } else {
-          // Handle different value types
-          let parsedValue: any = value
-          if (value === "true") parsedValue = true
-          else if (value === "false") parsedValue = false
-          else if (value === "null") parsedValue = null
-          else if (!isNaN(Number(value)) && value !== "") parsedValue = Number(value)
-          else if (value.startsWith('"') && value.endsWith('"')) {
-            parsedValue = value.slice(1, -1)
-          }
-
-          result[key.trim()] = parsedValue
-        }
-      }
-    }
-
-    return result
-  } catch (error) {
-    throw new Error("Invalid YAML format")
-  }
-}
-
-const stringifyYAML = (obj: any, indent = 0): string => {
-  const spaces = "  ".repeat(indent)
-  let result = ""
-
-  for (const [key, value] of Object.entries(obj)) {
-    if (typeof value === "object" && value !== null && !Array.isArray(value)) {
-      result += `${spaces}${key}:\n`
-      result += stringifyYAML(value, indent + 1)
-    } else if (Array.isArray(value)) {
-      result += `${spaces}${key}:\n`
-      for (const item of value) {
-        if (typeof item === "object") {
-          result += `${spaces}  -\n`
-          result += stringifyYAML(item, indent + 2)
-        } else {
-          result += `${spaces}  - ${item}\n`
-        }
-      }
-    } else {
-      const stringValue = typeof value === "string" ? `"${value}"` : String(value)
-      result += `${spaces}${key}: ${stringValue}\n`
-    }
-  }
-
-  return result
-}
 
 export function JsonYamlFormatter() {
   const [activeTab, setActiveTab] = useState<"json" | "yaml">("json")
@@ -107,16 +54,21 @@ export function JsonYamlFormatter() {
     "responsive": true
   }
 }`)
-  const [output, setOutput] = useState("")
   const [error, setError] = useState<string | null>(null)
-  const [isValid, setIsValid] = useState(true)
   const [copied, setCopied] = useState(false)
+  const [copiedMinified, setCopiedMinified] = useState(false)
+
+  // New State for new features
+  const [indentation, setIndentation] = useState<number>(2)
+  const [urlInput, setUrlInput] = useState("")
+  const [isFetching, setIsFetching] = useState(false)
+  const [fetchError, setFetchError] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const formatResult = useMemo(() => {
     try {
       if (!input.trim()) {
         setError(null)
-        setIsValid(true)
         return { formatted: "", minified: "", converted: "" }
       }
 
@@ -126,51 +78,53 @@ export function JsonYamlFormatter() {
       let converted: string
 
       if (activeTab === "json") {
-        // Parse and format JSON
         parsed = JSON.parse(input)
-        formatted = JSON.stringify(parsed, null, 2)
+        formatted = JSON.stringify(parsed, null, indentation)
         minified = JSON.stringify(parsed)
-        converted = stringifyYAML(parsed)
-      } else {
-        // Parse and format YAML
-        parsed = parseYAML(input)
-        formatted = stringifyYAML(parsed)
-        minified = stringifyYAML(parsed).replace(/\n\s*/g, " ").trim()
-        converted = JSON.stringify(parsed, null, 2)
+        // Use the robust js-yaml library for conversion
+        converted = YAML.dump(parsed, { indent: indentation })
+      } else { // activeTab is 'yaml'
+        // Use the robust js-yaml library for parsing
+        parsed = YAML.load(input)
+        if (typeof parsed === 'undefined' || parsed === null) {
+          throw new Error("YAML content is empty or invalid.")
+        }
+        formatted = YAML.dump(parsed, { indent: indentation })
+        minified = JSON.stringify(parsed) // "Minified" YAML is best represented as minified JSON
+        converted = JSON.stringify(parsed, null, indentation)
       }
 
       setError(null)
-      setIsValid(true)
       return { formatted, minified, converted }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : `Invalid ${activeTab.toUpperCase()} format`
       setError(errorMessage)
-      setIsValid(false)
       return { formatted: input, minified: "", converted: "" }
     }
-  }, [input, activeTab])
+  }, [input, activeTab, indentation])
 
-  const handleFormat = (type: "formatted" | "minified") => {
-    if (type === "formatted") {
-      setOutput(formatResult.formatted)
-    } else {
-      setOutput(formatResult.minified)
-    }
-  }
+  const isValid = !error && input.trim().length > 0
 
   const handleConvert = () => {
-    setOutput(formatResult.converted)
-    setActiveTab(activeTab === "json" ? "yaml" : "json")
+    if (!isValid) return
+    const newTab = activeTab === "json" ? "yaml" : "json"
+    setInput(formatResult.converted)
+    setActiveTab(newTab)
   }
 
-  const copyToClipboard = async (text: string) => {
+  const copyToClipboard = async (text: string, type: "formatted" | "minified") => {
     await navigator.clipboard.writeText(text)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    if (type === 'formatted') {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } else {
+      setCopiedMinified(true)
+      setTimeout(() => setCopiedMinified(false), 2000)
+    }
   }
 
   const downloadFile = (content: string, filename: string) => {
-    const blob = new Blob([content], { type: "text/plain" })
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" })
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
@@ -184,6 +138,13 @@ export function JsonYamlFormatter() {
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
+      // Smart tab switching based on file extension
+      if (file.name.endsWith('.yaml') || file.name.endsWith('.yml')) {
+        setActiveTab('yaml')
+      } else if (file.name.endsWith('.json')) {
+        setActiveTab('json')
+      }
+
       const reader = new FileReader()
       reader.onload = (e) => {
         const content = e.target?.result as string
@@ -191,6 +152,46 @@ export function JsonYamlFormatter() {
       }
       reader.readAsText(file)
     }
+    // Reset file input to allow uploading the same file again
+    if (event.target) {
+      event.target.value = ""
+    }
+  }
+
+  const handleFetchUrl = async () => {
+    if (!urlInput) {
+      setFetchError("Please enter a URL.")
+      return
+    }
+    setIsFetching(true)
+    setFetchError(null)
+    try {
+      const response = await fetch(urlInput)
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`)
+      }
+      const data = await response.text()
+      // A simple heuristic to guess the content type
+      try {
+        JSON.parse(data)
+        setActiveTab("json")
+      } catch (e) {
+        setActiveTab("yaml")
+      }
+      setInput(data)
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Failed to fetch data."
+      setFetchError(`Error fetching from URL: ${errorMessage}. Check CORS policy and URL validity.`)
+    } finally {
+      setIsFetching(false)
+    }
+  }
+
+  const getSampleData = (type: "json" | "yaml") => {
+    if (activeTab !== type) {
+      setActiveTab(type)
+    }
+    setInput(sampleData[type])
   }
 
   const sampleData = {
@@ -201,39 +202,73 @@ export function JsonYamlFormatter() {
   "features": [
     "Regex Playground",
     "JSON/YAML Formatter",
-    "Boilerplate Generator",
-    "Developer Cheat Sheets"
+    "Boilerplate Generator"
   ],
   "config": {
     "theme": "dark",
-    "offline": true,
     "responsive": true
   }
 }`,
-    yaml: `name: "DevKit Lanka"
-version: "1.0.0"
-description: "A handy toolkit for developers"
+    yaml: `name: DevKit Lanka
+version: 1.0.0
+description: A handy toolkit for developers
 features:
-  - "Regex Playground"
-  - "JSON/YAML Formatter"
-  - "Boilerplate Generator"
-  - "Developer Cheat Sheets"
+  - Regex Playground
+  - JSON/YAML Formatter
+  - Boilerplate Generator
 config:
-  theme: "dark"
-  offline: true
-  responsive: true`,
+  theme: dark
+  responsive: true
+`,
   }
+
+  const currentFormat = activeTab.toUpperCase()
+  const targetFormat = activeTab === 'json' ? 'YAML' : 'JSON'
 
   return (
     <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Link className="h-5 w-5" />
+            Fetch from URL
+          </CardTitle>
+          <CardDescription>
+            Enter a URL to fetch JSON or YAML data directly from an API endpoint.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-start gap-2">
+            <div className="flex-grow space-y-1">
+              <Input
+                type="url"
+                placeholder="https://api.example.com/data.json"
+                value={urlInput}
+                onChange={(e) => setUrlInput(e.target.value)}
+                disabled={isFetching}
+              />
+              {fetchError && (
+                <p className="text-xs text-destructive">{fetchError}</p>
+              )}
+            </div>
+            <Button onClick={handleFetchUrl} disabled={isFetching}>
+              {isFetching ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+              Fetch
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "json" | "yaml")}>
-        <div className="flex items-center justify-between">
-          <TabsList className="grid w-fit grid-cols-2">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <TabsList className="grid w-full sm:w-fit grid-cols-2">
             <TabsTrigger value="json">JSON</TabsTrigger>
             <TabsTrigger value="yaml">YAML</TabsTrigger>
           </TabsList>
 
           <div className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" onClick={() => getSampleData('json')}>JSON Sample</Button>
+            <Button variant="ghost" size="sm" onClick={() => getSampleData('yaml')}>YAML Sample</Button>
             <Badge variant={isValid ? "default" : "destructive"} className="flex items-center gap-1">
               {isValid ? <CheckCircle className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
               {isValid ? "Valid" : "Invalid"}
@@ -241,239 +276,137 @@ config:
           </div>
         </div>
 
-        <TabsContent value="json" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Input */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  JSON Input
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setInput(sampleData.json)}
-                      className="bg-transparent"
-                    >
-                      Sample
-                    </Button>
-                    <Label htmlFor="json-upload" className="cursor-pointer">
-                      <Button variant="outline" size="sm" asChild className="bg-transparent">
-                        <span>
-                          <Upload className="w-4 h-4 mr-2" />
-                          Upload
-                        </span>
-                      </Button>
-                    </Label>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Input Panel */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                {currentFormat} Input
+                <TooltipProvider>
+                  <div className="flex items-center gap-1">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => fileInputRef.current?.click()}
+                        >
+                          <Upload className="w-4 h-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Upload File</TooltipContent>
+                    </Tooltip>
                     <input
-                      id="json-upload"
+                      ref={fileInputRef}
                       type="file"
-                      accept=".json,.txt"
+                      accept=".json,.yaml,.yml,.txt"
                       onChange={handleFileUpload}
                       className="hidden"
                     />
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button variant="outline" size="icon" onClick={() => setInput("")}>
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Clear Input</TooltipContent>
+                    </Tooltip>
                   </div>
-                </CardTitle>
-                <CardDescription>Paste or upload your JSON data</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Textarea
+                </TooltipProvider>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="relative">
+                <CodeMirror
                   value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Paste your JSON here..."
-                  className="min-h-[400px] text-sm"
+                  height="450px"
+                  theme={githubDark}
+                  extensions={[activeTab === "json" ? json() : yaml()]}
+                  onChange={(value) => setInput(value)}
+                  className="border rounded-md"
                 />
                 {error && (
                   <Alert variant="destructive" className="mt-4">
                     <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>{error}</AlertDescription>
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription className="break-words">{error}</AlertDescription>
                   </Alert>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Output */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  Formatted Output
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleFormat("formatted")}
-                      disabled={!isValid}
-                      className="bg-transparent"
-                    >
-                      <Maximize2 className="w-4 h-4 mr-2" />
-                      Format
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleFormat("minified")}
-                      disabled={!isValid}
-                      className="bg-transparent"
-                    >
-                      <Minimize2 className="w-4 h-4 mr-2" />
-                      Minify
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={handleConvert}
-                      disabled={!isValid}
-                      className="bg-transparent"
-                    >
-                      <ArrowRightLeft className="w-4 h-4 mr-2" />
-                      To YAML
-                    </Button>
-                  </div>
-                </CardTitle>
-                <CardDescription>Formatted and validated JSON</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Textarea
-                  value={output || formatResult.formatted}
-                  readOnly
-                  className="min-h-[400px] text-sm bg-muted"
-                />
-                <div className="flex items-center gap-2 mt-4">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => copyToClipboard(output || formatResult.formatted)}
-                    className="bg-transparent"
+          {/* Output Panel */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                Formatted Output
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="indentation" className="text-sm font-medium">Indent</Label>
+                  <Select
+                    value={String(indentation)}
+                    onValueChange={(val) => setIndentation(Number(val))}
                   >
-                    {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
-                    {copied ? "Copied!" : "Copy"}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => downloadFile(output || formatResult.formatted, "formatted.json")}
-                    className="bg-transparent"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Download
-                  </Button>
+                    <SelectTrigger className="w-[70px]">
+                      <SelectValue placeholder="Indent" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="2">2</SelectItem>
+                      <SelectItem value="4">4</SelectItem>
+                      <SelectItem value="8">8</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="yaml" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Input */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  YAML Input
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setInput(sampleData.yaml)}
-                      className="bg-transparent"
-                    >
-                      Sample
-                    </Button>
-                    <Label htmlFor="yaml-upload" className="cursor-pointer">
-                      <Button variant="outline" size="sm" asChild className="bg-transparent">
-                        <span>
-                          <Upload className="w-4 h-4 mr-2" />
-                          Upload
-                        </span>
-                      </Button>
-                    </Label>
-                    <input
-                      id="yaml-upload"
-                      type="file"
-                      accept=".yaml,.yml,.txt"
-                      onChange={handleFileUpload}
-                      className="hidden"
-                    />
-                  </div>
-                </CardTitle>
-                <CardDescription>Paste or upload your YAML data</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Textarea
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Paste your YAML here..."
-                  className="min-h-[400px] text-sm"
-                />
-                {error && (
-                  <Alert variant="destructive" className="mt-4">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>{error}</AlertDescription>
-                  </Alert>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Output */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  Formatted Output
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleFormat("formatted")}
-                      disabled={!isValid}
-                      className="bg-transparent"
-                    >
-                      <Maximize2 className="w-4 h-4 mr-2" />
-                      Format
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={handleConvert}
-                      disabled={!isValid}
-                      className="bg-transparent"
-                    >
-                      <ArrowRightLeft className="w-4 h-4 mr-2" />
-                      To JSON
-                    </Button>
-                  </div>
-                </CardTitle>
-                <CardDescription>Formatted and validated YAML</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Textarea
-                  value={output || formatResult.formatted}
-                  readOnly
-                  className="min-h-[400px] text-sm bg-muted"
-                />
-                <div className="flex items-center gap-2 mt-4">
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CodeMirror
+                value={isValid ? formatResult.formatted : `// Fix the error in the input to see the formatted output`}
+                readOnly
+                height="450px"
+                theme={githubDark}
+                extensions={[activeTab === "json" ? json() : yaml()]}
+                className="border rounded-md bg-muted"
+              />
+              <div className="flex flex-wrap items-center gap-2 mt-4">
+                <Button onClick={handleConvert} disabled={!isValid}>
+                  <ArrowRightLeft className="w-4 h-4 mr-2" />
+                  Convert to {targetFormat}
+                </Button>
+                <div className="flex-grow" />
+                {activeTab === 'json' &&
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => copyToClipboard(output || formatResult.formatted)}
-                    className="bg-transparent"
+                    onClick={() => copyToClipboard(formatResult.minified, "minified")}
+                    disabled={!isValid}
                   >
-                    {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
-                    {copied ? "Copied!" : "Copy"}
+                    {copiedMinified ? <Check className="w-4 h-4 mr-2" /> : <Minimize2 className="w-4 h-4 mr-2" />}
+                    {copiedMinified ? "Copied!" : "Copy Minified"}
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => downloadFile(output || formatResult.formatted, "formatted.yaml")}
-                    className="bg-transparent"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Download
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
+                }
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => copyToClipboard(formatResult.formatted, "formatted")}
+                  disabled={!isValid}
+                >
+                  {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
+                  {copied ? "Copied!" : "Copy"}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => downloadFile(formatResult.formatted, `formatted.${activeTab}`)}
+                  disabled={!isValid}
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </Tabs>
     </div>
   )

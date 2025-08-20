@@ -1,6 +1,7 @@
 import { JsonYamlFormatter } from "@/components/json-yaml-formatter"
 import { Navbar1 } from "@/components/navbar1"
-import { Code2, FileJson } from "lucide-react"
+import { JsonYamlUserManual } from "@/components/json-yaml-user-manual"
+import { FileJson } from "lucide-react"
 
 export default function FormatterPage() {
     return (
@@ -9,9 +10,9 @@ export default function FormatterPage() {
             <div className="min-h-screen mt-10 sm:mt-20">
                 <main className="container mx-auto px-2 sm:px-6 py-8 sm:py-12 flex items-center justify-center">
                     <div className="relative w-full max-w-7xl p-4 sm:p-8 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-lg hover:shadow-2xl transition-all duration-300 group">
-                        {/* Help / How-to dialog */}
 
-
+                        {/* Help / How-to dialog component is now here */}
+                        <JsonYamlUserManual />
 
                         {/* Header */}
                         <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
@@ -26,8 +27,9 @@ export default function FormatterPage() {
                             Format, validate, and convert between JSON and YAML with syntax highlighting
                         </p>
 
-                        {/* The actual playground */}
+                        {/* The actual formatter tool */}
                         <JsonYamlFormatter />
+
                     </div>
                 </main>
             </div>
