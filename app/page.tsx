@@ -9,8 +9,8 @@ export default function Home() {
   return (
 
     <>
-      <ParticlesDemo />
       <Navbar1 />
+      <ParticlesDemo />
       <ServiceCards />
       <Cards />
       <div className="block">

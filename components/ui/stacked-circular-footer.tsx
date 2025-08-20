@@ -9,9 +9,10 @@ function StackedCircularFooter() {
     <footer className="bg-background py-12">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center">
-          <div className="mb-8 rounded-full bg-primary/10 p-8">
-          <Icons.logo className="icon-class w-6" />
-          </div>
+          <div className="mb-8 rounded-full bg-primary/10 p-8 flex items-center justify-center">
+  <img src="/logo.svg" alt="Logo" className="w-12 h-12" />
+</div>
+
           <nav className="mb-8 flex flex-wrap justify-center gap-6">
             <a href="#" className="hover:text-primary">Home</a>
             <a href="#" className="hover:text-primary">Regex Playground</a>
@@ -39,7 +40,7 @@ function StackedCircularFooter() {
           </div>
           <div className="text-center">
             <p className="text-sm text-muted-foreground">
-              © 2024 Your Company. All rights reserved.
+              © 2024 DevDeck. Open Source. Built for Developers.
             </p>
           </div>
         </div>

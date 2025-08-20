@@ -41,11 +41,10 @@ export default function Cards() {
         <section className="py-16 md:py-32">
             <div className="mx-auto w-full max-w-5xl space-y-8 px-4">
                 <h2 className="text-3xl font-bold tracking-wide text-balance md:text-4xl lg:text-5xl xl:font-extrabold">
-                    Why Choose DevKit Lanka?
+                    Why Developers Choose DevDeck
                 </h2>
                 <p className="text-muted-foreground mt-4 text-sm tracking-wide text-balance md:text-base">
-                    Built with modern web technologies for the fastest, most secure developer experience
-                </p>
+                A toolkit designed with developers in mind—fast, secure, and always at your fingertips. Every feature is crafted to simplify your workflow and give you the freedom to code without distractions.</p>
 
                 <div className="grid grid-cols-1 divide-x divide-y divide-dashed border border-dashed sm:grid-cols-2 md:grid-cols-3">
                     {features.map((feature, i) => (

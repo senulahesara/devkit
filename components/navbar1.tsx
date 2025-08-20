@@ -51,12 +51,12 @@ interface Navbar1Props {
 const Navbar1 = ({
   logo = {
     url: "/",
-    src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/shadcnblockscom-icon.svg",
+    src: "/logo.svg",
     alt: "logo",
-    title: "Shadcnblocks.com",
+    title: "DevDeck",
   },
   menu = [
-    { title: "Home", url: "#" },
+    { title: "Home", url: "/" },
     {
       title: "Tools",
       url: "#",
@@ -65,7 +65,7 @@ const Navbar1 = ({
           title: "Regex Playground",
           description: "Test regex with live results",
           icon: <CodeXml className="size-5 shrink-0" />,
-          url: "#",
+          url: "/regex",
         },
         {
           title: "JSON/YAML Formatter",
@@ -87,15 +87,15 @@ const Navbar1 = ({
         },
       ],
     },
+    { title: "PWA", url: "#" },
   ],
-
 }: Navbar1Props) => {
   return (
     <header className="fixed top-0 left-0 w-full z-50 border-b bg-white/70 dark:bg-background">
       <div className="mx-auto flex max-w-screen-xl items-center justify-between px-4 py-3 lg:py-4">
         {/* Logo */}
         <a href={logo.url} className="flex items-center gap-2">
-          <img src={logo.src} alt={logo.alt} className="h-8 dark:invert" />
+          <img src={logo.src} alt={logo.alt} className="h-8" />
           <span className="text-lg font-semibold">{logo.title}</span>
         </a>
 
@@ -122,12 +122,11 @@ const Navbar1 = ({
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-72 sm:w-80">
-
               <SheetHeader>
                 <SheetTitle>
                   <a href={logo.url} className="flex items-center gap-2">
-                    <img src={logo.src} alt={logo.alt} className="h-8 dark:invert" />
-                    <span className="font-semibold">{logo.title}</span>
+                    <img src={logo.src} alt={logo.alt} className="h-8" />
+                    <span className="text-lg font-semibold">{logo.title}</span>
                   </a>
                 </SheetTitle>
               </SheetHeader>
@@ -144,7 +143,6 @@ const Navbar1 = ({
                   <GitHubStarButton />
                 </div>
               </div>
-
             </SheetContent>
           </Sheet>
         </div>
@@ -191,9 +189,7 @@ const renderMobileMenuItem = (item: MenuItem) => {
   if (item.items) {
     return (
       <AccordionItem key={item.title} value={item.title}>
-        <AccordionTrigger className="font-medium">
-          {item.title}
-        </AccordionTrigger>
+        <AccordionTrigger className="font-medium">{item.title}</AccordionTrigger>
         <AccordionContent className="pl-3 flex flex-col gap-2">
           {item.items.map((subItem) => (
             <SubMenuLink key={subItem.title} item={subItem} />
