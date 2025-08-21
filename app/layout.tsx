@@ -19,7 +19,9 @@ export const metadata: Metadata = {
   icons: {
     icon: "/logo.svg",
     shortcut: "/logo.svg",
+    apple: "/logo.svg", // for iOS
   },
+  manifest: "/manifest.json", // <-- PWA manifest
 };
 
 export default function RootLayout({
@@ -29,6 +31,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* PWA primary color */}
+        <meta name="theme-color" content="#000000" />
+
+        {/* iOS support */}
+        <link rel="apple-touch-icon" href="/logo.svg" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta name="apple-mobile-web-app-title" content="DevDeck" />
+
+        {/* Android support */}
+        <meta name="mobile-web-app-capable" content="yes" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

@@ -87,7 +87,7 @@ const Navbar = ({
         },
       ],
     },
-    { title: "PWA", url: "#" },
+    // { title: "PWA", url: "#" },
   ],
 }: Navbar1Props) => {
   return (
