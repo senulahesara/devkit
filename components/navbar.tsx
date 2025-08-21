@@ -48,7 +48,7 @@ interface Navbar1Props {
   };
 }
 
-const Navbar1 = ({
+const Navbar = ({
   logo = {
     url: "/",
     src: "/logo.svg",
@@ -71,19 +71,19 @@ const Navbar1 = ({
           title: "JSON/YAML Formatter",
           description: "Format and validate JSON/YAML",
           icon: <FileText className="size-5 shrink-0" />,
-          url: "#",
+          url: "/formatter",
         },
         {
           title: "Boilerplate Generator",
           description: "Generate starter project templates",
           icon: <Layers className="size-5 shrink-0" />,
-          url: "#",
+          url: "/boilerplate",
         },
         {
           title: "Developer Cheat Sheets",
           description: "Quick Git and Linux reference",
           icon: <BookOpen className="size-5 shrink-0" />,
-          url: "#",
+          url: "/cheatsheets",
         },
       ],
     },
@@ -222,4 +222,4 @@ const SubMenuLink = ({ item }: { item: MenuItem }) => {
   );
 };
 
-export { Navbar1 };
+export { Navbar };

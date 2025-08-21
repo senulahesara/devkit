@@ -1,31 +1,13 @@
 "use client";
-import { Navbar1 } from "@/components/navbar1";
-import { StackedCircularFooter } from "@/components/ui/stacked-circular-footer";
+import { Navbar } from "@/components/navbar";
+import { StackedCircularFooter } from "@/components/stacked-circular-footer";
 import { RegexPlayground } from "@/components/regex-playground";
-import { Code2, HelpCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Code2 } from "lucide-react";
 
 export default function RegexPage() {
   return (
     <>
-      <Navbar1 />
+      <Navbar />
       <div className="min-h-screen mt-10 sm:mt-20">
         <main className="container mx-auto px-2 sm:px-6 py-8 sm:py-12 flex items-center justify-center">
           <div className="relative w-full max-w-7xl p-4 sm:p-8 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-lg hover:shadow-2xl transition-all duration-300 group">
@@ -43,8 +25,8 @@ export default function RegexPage() {
               Test and debug regular expressions with real-time matching and highlighting
             </p>
 
-            {/* The actual playground */}
             <RegexPlayground />
+
           </div>
         </main>
       </div>

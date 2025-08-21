@@ -1,12 +1,11 @@
 "use client"
-
 import { useEffect, useState } from "react"
 import { useTheme } from "next-themes"
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { Particles } from "@/components/ui/particles"
 import { cn } from "@/lib/utils";
 
-export function ParticlesDemo() {
+export function HeroSection() {
   const { theme } = useTheme()
   const [color, setColor] = useState("#ffffff")
 
@@ -16,7 +15,7 @@ export function ParticlesDemo() {
 
   return (
     <div className="mt-20 relative flex min-h-[500px] w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-background md:shadow-xl px-4">
-      
+
       {/* Badge */}
       <div
         className={cn(
@@ -35,7 +34,7 @@ export function ParticlesDemo() {
 
       {/* Paragraph */}
       <p className="mt-4 max-w-2xl text-center text-sm md:text-base text-gray-600 dark:text-gray-300">
-        Essential tools, blazing-fast performance, and offline-ready features—built to streamline your workflow and keep you focused on what matters: writing great code.
+        Essential tools, blazing-fast performance, and offline-ready features-built to streamline your workflow and keep you focused on what matters: writing great code.
       </p>
 
       {/* Background Particles */}

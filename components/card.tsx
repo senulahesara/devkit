@@ -1,5 +1,5 @@
 'use client';
-import { Zap, Cpu, Fingerprint, Pencil, Settings2, Sparkles,Smartphone ,Globe ,Database,Clock4} from 'lucide-react';
+import { Zap, Fingerprint, Smartphone, Globe, Database, Clock4 } from 'lucide-react';
 import { motion, useReducedMotion } from 'motion/react';
 import { FeatureCard } from './grid-feature-cards';
 
@@ -44,7 +44,7 @@ export default function Cards() {
                     Why Developers Choose DevDeck
                 </h2>
                 <p className="text-muted-foreground mt-4 text-sm tracking-wide text-balance md:text-base">
-                A toolkit designed with developers in mind—fast, secure, and always at your fingertips. Every feature is crafted to simplify your workflow and give you the freedom to code without distractions.</p>
+                    A toolkit designed with developers in mind—fast, secure, and always at your fingertips. Every feature is crafted to simplify your workflow and give you the freedom to code without distractions.</p>
 
                 <div className="grid grid-cols-1 divide-x divide-y divide-dashed border border-dashed sm:grid-cols-2 md:grid-cols-3">
                     {features.map((feature, i) => (

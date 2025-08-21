@@ -1,4 +1,3 @@
-// components/GitHubStarButton.tsx
 "use client";
 
 import { useMemo } from "react";
@@ -15,7 +14,6 @@ export function GitHubStarButton() {
     { revalidateOnFocus: false }
   );
 
-  // format count nicely (e.g., 1.2k)
   const stars = useMemo(() => {
     const n = data?.stargazers_count ?? 0;
     if (n < 1000) return String(n);

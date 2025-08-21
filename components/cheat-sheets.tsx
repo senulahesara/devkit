@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label"
 import { LucideProps } from "lucide-react"
 
 // --- DATA STRUCTURES ---
-
 interface CheatSheetItem {
   command: string
   description: string
@@ -29,35 +28,35 @@ interface CheatSheet {
 
 const gitCommands: CheatSheetItem[] = [
   // Existing commands...
-  { command: "git init", description: "Initialize a new Git repository", sinhala: "නව Git repository එකක් ආරම්භ කරන්න", example: "git init", category: "Setup" },
-  { command: "git clone <url>", description: "Clone a repository from remote", sinhala: "දුරස්ථ repository එකක් copy කරන්න", example: "git clone https://github.com/user/repo.git", category: "Setup" },
+  { command: "git init", description: "Initialize a new Git repository", sinhala: "අලුත් Git repository එකක් පටන් ගන්න", example: "git init", category: "Setup" },
+  { command: "git clone <url>", description: "Clone a repository from remote", sinhala: "Repository එකක් copy කරන්න", example: "git clone https://github.com/user/repo.git", category: "Setup" },
   { command: "git add <file>", description: "Add file to staging area", sinhala: "file එකක් staging area එකට එකතු කරන්න", example: "git add index.html", category: "Basic" },
   { command: "git add .", description: "Add all files to staging area", sinhala: "සියලුම files staging area එකට එකතු කරන්න", example: "git add .", category: "Basic" },
-  { command: "git commit -m 'message'", description: "Commit changes with message", sinhala: "වෙනස්කම් message එකක් සමඟ commit කරන්න", example: "git commit -m 'Add new feature'", category: "Basic" },
+  { command: "git commit -m 'message'", description: "Commit changes with message", sinhala: "වෙනස්කම් ටික message එකක් එක්ක commit කරන්න", example: "git commit -m 'Add new feature'", category: "Basic" },
   { command: "git status", description: "Check repository status", sinhala: "repository එකේ තත්වය පරීක්ෂා කරන්න", example: "git status", category: "Basic" },
-  { command: "git log", description: "View commit history", sinhala: "commit ඉතිහාසය බලන්න", example: "git log --oneline --graph", category: "Basic" },
+  { command: "git log", description: "View commit history", sinhala: "commit කරපු ඉතිහාසය බලන්න", example: "git log --oneline --graph", category: "Basic" },
   { command: "git push origin <branch>", description: "Push changes to remote branch", sinhala: "වෙනස්කම් remote branch එකට push කරන්න", example: "git push origin main", category: "Remote" },
-  { command: "git pull", description: "Pull latest changes from remote", sinhala: "remote එකෙන් නවතම වෙනස්කම් pull කරන්න", example: "git pull origin main", category: "Remote" },
-  { command: "git branch", description: "List all branches", sinhala: "සියලුම branches ලැයිස්තුව", example: "git branch -a", category: "Branching" },
+  { command: "git pull", description: "Pull latest changes from remote", sinhala: "remote එකෙන් අලුත් වෙනස්කම් pull කරන්න", example: "git pull origin main", category: "Remote" },
+  { command: "git branch", description: "List all branches", sinhala: "සියලුම branches බලාගන්න", example: "git branch -a", category: "Branching" },
   { command: "git checkout <branch>", description: "Switch to branch", sinhala: "branch එකට මාරු වන්න", example: "git checkout develop", category: "Branching" },
-  { command: "git checkout -b <branch>", description: "Create and switch to new branch", sinhala: "නව branch එකක් සාදා එයට මාරු වන්න", example: "git checkout -b feature/login", category: "Branching" },
-  { command: "git merge <branch>", description: "Merge branch into current branch", sinhala: "branch එක වර්තමාන branch එකට merge කරන්න", example: "git merge feature/login", category: "Branching" },
+  { command: "git checkout -b <branch>", description: "Create and switch to new branch", sinhala: "නව branch එකක් හදලා ඒකට මාරු වන්න", example: "git checkout -b feature/login", category: "Branching" },
+  { command: "git merge <branch>", description: "Merge branch into current branch", sinhala: "branch එක දැන් branch එකට merge කරන්න", example: "git merge feature/login", category: "Branching" },
   { command: "git stash", description: "Temporarily save uncommitted changes", sinhala: "commit නොකළ වෙනස්කම් තාවකාලිකව save කරන්න", example: "git stash push -m 'work in progress'", category: "Advanced" },
   { command: "git stash pop", description: "Apply and remove latest stash", sinhala: "අවසාන stash එක apply කර remove කරන්න", example: "git stash pop", category: "Advanced" },
   { command: "git diff", description: "Show changes between commits, commit and working tree, etc.", sinhala: "commits, working tree අතර වෙනස්කම් පෙන්වන්න", example: "git diff HEAD~1", category: "Advanced" },
-  
+
   // New "Power User" Git Commands
   {
     command: "git reflog",
     description: "Show a log of reference changes (e.g., HEAD changes). Your safety net!",
-    sinhala: "Reference වෙනස්වීම් වල log එක බලන්න (උදා: HEAD වෙනස්වීම්). ඔබේ ආරක්ෂක දැල!",
+    sinhala: "Reference වෙනස්වීම් වල log එක බලන්න",
     example: "git reflog",
     category: "Power User",
   },
   {
     command: "git rebase -i HEAD~<n>",
     description: "Interactively rebase the last <n> commits (squash, edit, reorder).",
-    sinhala: "අවසාන commits <n> ගණන interactiveව rebase කරන්න (squash, edit, reorder).",
+    sinhala: "අවසාන commits <n> ගණන interactiveව rebase කරන්න.",
     example: "git rebase -i HEAD~3",
     category: "Power User",
   },
@@ -71,26 +70,25 @@ const gitCommands: CheatSheetItem[] = [
   {
     command: "git cherry-pick <commit-hash>",
     description: "Apply the changes from a specific commit onto the current branch.",
-    sinhala: "වෙනත් branch එකක commit එකක් වත්මන් branch එකට apply කරන්න.",
+    sinhala: "වෙනත් branch එකක commit එකක් දැන් branch එකට apply කරන්න.",
     example: "git cherry-pick a1b2c3d4",
     category: "Power User",
   },
   {
     command: "git reset --soft HEAD~1",
     description: "Uncommit changes, keeping them in the staging area.",
-    sinhala: "අවසන් commit එක අහෝසි කර, වෙනස්කම් staging area එකේ තබන්න.",
+    sinhala: "අවසන් commit එක cancel කර, වෙනස්කම් staging area එකේ තියාගන්න.",
     example: "git reset --soft HEAD~1",
     category: "Advanced",
   },
 ];
 
 const linuxCommands: CheatSheetItem[] = [
-  // Existing commands...
-  { command: "ls -la", description: "List directory contents with details", sinhala: "directory එකේ අන්තර්ගතය විස්තරාත්මකව", example: "ls -la", category: "Navigation" },
+  { command: "ls -la", description: "List directory contents with details", sinhala: "directory එකේ අන්තර්ගතය විස්තරාත්මකව බලාගන්න", example: "ls -la", category: "Navigation" },
   { command: "cd <directory>", description: "Change directory", sinhala: "directory එක වෙනස් කරන්න", example: "cd /home/user", category: "Navigation" },
-  { command: "pwd", description: "Print working directory", sinhala: "වර්තමාන directory එක පෙන්වන්න", example: "pwd", category: "Navigation" },
+  { command: "pwd", description: "Print working directory", sinhala: "දැන් directory එක පෙන්වන්න", example: "pwd", category: "Navigation" },
   { command: "mkdir -p <path>", description: "Create directory including parent dirs", sinhala: "parent directories සමඟ directory එකක් සාදන්න", example: "mkdir -p project/src/components", category: "File Operations" },
-  { command: "rm -rf <directory>", description: "Remove directory and contents (dangerous)", sinhala: "directory එක සහ අන්තර්ගතය ඉවත් කරන්න (අනතුරුදායක)", example: "rm -rf old-project/", category: "File Operations" },
+  { command: "rm -rf <directory>", description: "Remove directory and contents (dangerous)", sinhala: "directory එක සහ අන්තර්ගතය ඉවත් කරන්න", example: "rm -rf old-project/", category: "File Operations" },
   { command: "cp -r <source> <dest>", description: "Copy directory recursively", sinhala: "directory එකක් recursively copy කරන්න", example: "cp -r project/ backup/", category: "File Operations" },
   { command: "mv <source> <dest>", description: "Move or rename file/directory", sinhala: "file/directory එකක් move හෝ rename කරන්න", example: "mv old.txt new.txt", category: "File Operations" },
   { command: "touch <file>", description: "Create empty file or update timestamp", sinhala: "හිස් file එකක් සාදන්න හෝ timestamp යාවකාලීන කරන්න", example: "touch newfile.txt", category: "File Operations" },
@@ -99,11 +97,9 @@ const linuxCommands: CheatSheetItem[] = [
   { command: "tail -f <file>", description: "Follow a file's content in real-time", sinhala: "file එකක අන්තර්ගතය real-time බලන්න", example: "tail -f app.log", category: "File Viewing" },
   { command: "grep -r <pattern> <dir>", description: "Search for pattern recursively in a directory", sinhala: "directory එකක pattern එකක් recursively සොයන්න", example: "grep -r 'API_KEY' .", category: "Search" },
   { command: "find <path> -name <pattern>", description: "Find files by name pattern", sinhala: "නම් pattern එකෙන් files සොයන්න", example: "find . -name '*.js'", category: "Search" },
-  { command: "ps aux", description: "List running processes", sinhala: "ක්‍රියාත්මක processes ලැයිස්තුව", example: "ps aux | grep node", category: "System" },
-  { command: "kill -9 <pid>", description: "Force terminate a process by ID", sinhala: "ID එකෙන් process එකක් බලහත්කාරයෙන් terminate කරන්න", example: "kill -9 1234", category: "System" },
+  { command: "ps aux", description: "List running processes", sinhala: "ක්‍රියාත්මක වන processes ලැයිස්තුව", example: "ps aux | grep node", category: "System" },
+  { command: "kill -9 <pid>", description: "Force terminate a process by ID", sinhala: "ID එකෙන් process එකක් force terminate කරන්න", example: "kill -9 1234", category: "System" },
   { command: "chmod +x <file>", description: "Make a file executable", sinhala: "file එකක් executable කරන්න", example: "chmod +x script.sh", category: "Permissions" },
-  
-  // New "Power User" Linux Commands
   {
     command: "xargs",
     description: "Build and execute command lines from standard input.",
@@ -114,21 +110,21 @@ const linuxCommands: CheatSheetItem[] = [
   {
     command: "lsof -i :<port>",
     description: "List processes using a specific network port.",
-    sinhala: " নির্দিষ্ট network port එකක් භාවිතා කරන processes ලැයිස්තුගත කරන්න.",
+    sinhala: "නිශ්චිත network port එකක් භාවිතා කරන processes ලැයිස්තුගත කරන්න.",
     example: "lsof -i :3000",
     category: "Power User",
   },
   {
     command: "history | grep <cmd>",
     description: "Search your command history.",
-    sinhala: "ඔබේ command ඉතිහාසය සොයන්න.",
+    sinhala: "command ඉතිහාසය සොයන්න.",
     example: "history | grep docker",
     category: "Power User",
   },
   {
     command: "df -h",
     description: "Display disk space usage in human-readable format.",
-    sinhala: "තැටි ඉඩ භාවිතය මිනිසුන්ට කියවිය හැකි ආකාරයෙන් පෙන්වන්න.",
+    sinhala: "disk space usage එක මිනිසුන්ට කියවිය හැකි ආකාරයෙන් පෙන්වන්න.",
     example: "df -h",
     category: "System",
   },
@@ -155,7 +151,7 @@ const npmCommands: CheatSheetItem[] = [
   { command: "npm run <script>", description: "Run a script defined in package.json", sinhala: "package.json හි script එකක් run කරන්න", example: "npm run dev", category: "Scripts" },
   { command: "npm init -y", description: "Initialize a new project without prompts", sinhala: "ප්‍රශ්න කිරීමකින් තොරව නව project එකක් ආරම්භ කරන්න", example: "npm init -y", category: "Project" },
   { command: "npm ci", description: "Clean Install: Install dependencies from package-lock.json", sinhala: "Clean Install: package-lock.json වෙතින් install කරන්න", example: "npm ci", category: "Power User" },
-  { command: "npm outdated", description: "Check for outdated packages", sinhala: "කල් ඉකුත් වූ packages පරීක්ෂා කරන්න", example: "npm outdated", category: "Dependencies" },
+  { command: "npm outdated", description: "Check for outdated packages", sinhala: "outdated packages පරීක්ෂා කරන්න", example: "npm outdated", category: "Dependencies" },
   { command: "npm audit fix", description: "Scan your project for vulnerabilities and fix them", sinhala: "අවදානම් සඳහා project එක scan කර ඒවා fix කරන්න", example: "npm audit fix --force", category: "Project" },
   { command: "npx <command>", description: "Execute a package without installing it globally", sinhala: "package එකක් global install නොකර execute කරන්න", example: "npx create-react-app my-app", category: "Power User" },
   { command: "pnpm overrides", description: "Force a specific version of a transitive dependency", sinhala: "Transitive dependency එකක නිශ්චිත version එකක් බලකරන්න", example: "pnpm overrides add react@^17.0.0", category: "Power User" },
@@ -190,7 +186,7 @@ export function CheatSheets() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
   const [copied, setCopied] = useState("")
-  
+
   const sheetEntries = Object.entries(cheatSheetData);
 
   const currentSheet = cheatSheetData[activeTab]
@@ -273,8 +269,6 @@ export function CheatSheets() {
     <div className="space-y-6">
       <Tabs value={activeTab} onValueChange={handleTabChange}>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-          
-          {/* 👇 BRO, THIS IS THE NEW RESPONSIVE LAYOUT FOR THE TABS 👇 */}
 
           {/* Mobile Layout: Two rows, visible only on small screens */}
           <div className="flex flex-col gap-1 md:hidden">
@@ -293,7 +287,7 @@ export function CheatSheets() {
               ))}
             </TabsList>
           </div>
-          
+
           {/* Desktop Layout: Single row, visible on medium screens and up */}
           <TabsList className="hidden md:grid w-fit grid-cols-4">
             {sheetEntries.map(([key, { label, icon: Icon }]) => (
