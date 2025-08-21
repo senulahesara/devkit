@@ -100,8 +100,8 @@ MIT License © 2025 Senula Hesara
 ## 📢 Connect  
 
 - GitHub: [senulahesara](https://github.com/senulahesara)  
-- Facebook: [@ysenulahesara](https://facebook.com/senula.hesara1)  
-- LinkedIn: [Your Name](https://linkedin.com/in/senulahesara)  
+- Facebook: [Senula Hesara](https://facebook.com/senulahesara1)  
+- LinkedIn: [Senula Hesara](https://linkedin.com/in/senulahesara)  
 
 ---
 
