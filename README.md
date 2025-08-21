@@ -1,36 +1,108 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 DevDeck  
 
-## Getting Started
+  Essential tools, blazing-fast performance, and offline-ready features-built to streamline your workflow and keep you focused on what matters: writing great code.
 
-First, run the development server:
+---
+
+## ✨ Features  
+
+- 🔍 **Regex Playground** → Test and validate regex patterns  
+- 📂 **JSON/YAML Formatter** → Beautify & validate JSON/YAML instantly  
+- ⚡ **Boilerplate Generator** → Quickly generate starter configs (`.gitignore`, `package.json`, etc.)  
+- 📘 **Cheat Sheets** → Essential Git/Linux commands in **Sinhala & English**  
+- 📱 **PWA Support** → Install DevDeck as an app & use offline  
+
+---
+
+## 🛠️ Tech Stack  
+
+- [Next.js](https://nextjs.org/) – React framework  
+- [shadcn/ui](https://ui.shadcn.com/) – Modern UI components  
+- [Tailwind CSS](https://tailwindcss.com/) – Styling  
+- [Vercel](https://vercel.com/) – Deployment  
+- **PWA Support** – Offline-first  
+
+---
+
+## 📦 Installation  
+
+Clone the repository:  
+
+```bash
+git clone https://github.com/senulahesara/devkit.git
+cd devdeck
+```
+
+Install dependencies:  
+
+```bash
+npm install
+```
+
+Run the development server:  
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open in your browser:  
+👉 [http://localhost:3000](http://localhost:3000)  
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🌐 Deployment  
 
-## Learn More
+DevDeck is deployed on **Vercel** for free hosting.  
+You can fork this repo and deploy your own version easily:  
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run build
+npm run start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📲 PWA Support  
 
-## Deploy on Vercel
+- DevDeck works offline after the first load  
+- Install it like an app on **Desktop or Mobile**  
+- Fast and lightweight  
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📚 Usage  
+
+1. Open DevDeck in your browser  
+2. Select a tool from the menu  
+3. Use it instantly (no login, no setup required)  
+4. Switch between **Sinhala / English** where available  
+
+---
+
+## 🤝 Contributing  
+
+Contributions are welcome!  
+
+- Fork the repo  
+- Create a new branch (`git checkout -b feature-name`)  
+- Commit changes (`git commit -m "Add feature"`)  
+- Push to your branch (`git push origin feature-name`)  
+- Open a Pull Request  
+
+---
+
+## 🛡️ License  
+
+MIT License © 2025 Senula Hesara  
+
+---
+
+## 📢 Connect  
+
+- GitHub: [senulahesara](https://github.com/senulahesara)  
+- Facebook: [@ysenulahesara](https://facebook.com/senula.hesara1)  
+- LinkedIn: [Your Name](https://linkedin.com/in/senulahesara)  
+
+---
+
+### ⭐ If you find DevDeck useful, don’t forget to **star this repo**!
