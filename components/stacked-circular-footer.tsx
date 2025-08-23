@@ -10,7 +10,8 @@ function StackedCircularFooter() {
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center">
           <div className="mb-8 rounded-full bg-primary/10 p-8 flex items-center justify-center">
-            <img src="/logo.svg" alt="Logo" className="w-12 h-12" />
+            <img src="/logo_black.svg" alt="Logo" className="w-12 h-12 dark:hidden" />
+            <img src="/logo.svg" alt="Logo" className="w-12 h-12 hidden dark:block" />
           </div>
 
           <nav className="mb-8 flex flex-wrap justify-center gap-6">
