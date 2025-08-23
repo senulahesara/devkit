@@ -29,9 +29,9 @@ export function GitHubStarButton() {
       aria-label="Star senulahesara/lms on GitHub"
       className="
         group inline-flex h-10 items-center rounded-md border px-4 text-sm font-medium
-        border-gray-300 bg-white text-black shadow-sm
-        transition-all duration-200 hover:bg-gray-100 active:scale-95
-        dark:border-gray-700 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800
+        border-border bg-card text-black dark:text-white shadow-sm
+        transition-all duration-200 hover:bg-muted active:scale-95
+        dark:border-border dark:bg-neutral-900 dark:hover:bg-neutral-800
       "
     >
       {/* GitHub mark */}
@@ -46,7 +46,7 @@ export function GitHubStarButton() {
 
       {/* star icon that reacts on hover */}
       <svg
-        className="size-4 text-gray-500 transition-colors duration-200 group-hover:text-yellow-400"
+        className="size-4 text-black dark:text-gray-500 transition-colors duration-200 group-hover:text-yellow-500"
         viewBox="0 0 24 24"
         aria-hidden="true"
         fill="currentColor"

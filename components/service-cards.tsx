@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { BookOpen, Code2, FileJson, Layers } from "lucide-react";
+import { BorderBeam } from "./border-beam";
 
 const cards = [
   {
@@ -73,21 +74,24 @@ export default function ServiceCards() {
             <motion.div
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className={`group cursor-pointer relative p-6 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col ${card.hover}`}
+              className={`group cursor-pointer relative p-6 rounded-2xl border border-border bg-card/70 backdrop-blur-xl shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col overflow-hidden ${card.hover}`}
             >
+              {/* Magic UI Border Beam: black in light mode, white in dark mode */}
+              <BorderBeam className="dark:hidden" colorFrom="#000000" colorTo="#000000" />
+              <BorderBeam className="hidden dark:block" colorFrom="#ffffff" colorTo="#ffffff" />
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 rounded-xl bg-white/10">{card.icon}</div>
-                <h3 className="text-lg font-semibold text-white">
+                <div className="p-2 rounded-xl bg-foreground/10">{card.icon}</div>
+                <h3 className="text-lg font-semibold text-black dark:text-white">
                   {card.title}
                 </h3>
               </div>
-              <p className="text-gray-300 text-sm mb-4">{card.desc}</p>
+              <p className="text-black dark:text-gray-300 text-sm mb-4">{card.desc}</p>
 
               {/* Features grow to push bottom evenly */}
-              <ul className="text-gray-400 text-sm space-y-2 flex-grow">
+              <ul className="text-black dark:text-gray-400 text-sm space-y-2 flex-grow">
                 {card.features.map((f, j) => (
                   <li key={j} className="flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                    <span className="w-1.5 h-1.5 bg-foreground/40 dark:bg-gray-400 rounded-full"></span>
                     {f}
                   </li>
                 ))}

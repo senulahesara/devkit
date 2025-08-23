@@ -25,6 +25,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { GitHubStarButton } from "./GitHubStarButton";
+import { ThemeToggle } from "./theme-toggle";
 
 interface MenuItem {
   title: string;
@@ -91,11 +92,12 @@ const Navbar = ({
   ],
 }: Navbar1Props) => {
   return (
-    <header className="fixed top-0 left-0 w-full z-50 border-b bg-white/70 dark:bg-background">
+    <header className="fixed top-0 left-0 w-full z-50 border-b bg-background/70">
       <div className="mx-auto flex max-w-screen-xl items-center justify-between px-4 py-3 lg:py-4">
         {/* Logo */}
         <a href={logo.url} className="flex items-center gap-2">
-          <img src={logo.src} alt={logo.alt} className="h-8" />
+          <img src="/logo_black.svg" alt={logo.alt} className="h-8 dark:hidden" />
+          <img src="/logo.svg" alt={logo.alt} className="h-8 hidden dark:block" />
           <span className="text-lg font-semibold">{logo.title}</span>
         </a>
 
@@ -108,13 +110,15 @@ const Navbar = ({
           </NavigationMenu>
         </nav>
 
-        {/* Auth Buttons */}
-        <div className="hidden lg:flex gap-2">
+        {/* Right Actions */}
+        <div className="hidden lg:flex gap-2 items-center">
           <GitHubStarButton />
+          <ThemeToggle />
         </div>
 
-        {/* Mobile Menu */}
-        <div className="lg:hidden">
+        {/* Mobile Menu and Theme Toggle */}
+        <div className="lg:hidden flex items-center gap-2">
+          <ThemeToggle />
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="outline" size="icon">
@@ -125,7 +129,8 @@ const Navbar = ({
               <SheetHeader>
                 <SheetTitle>
                   <a href={logo.url} className="flex items-center gap-2">
-                    <img src={logo.src} alt={logo.alt} className="h-8" />
+                    <img src="/logo_black.svg" alt={logo.alt} className="h-8 dark:hidden" />
+                    <img src="/logo.svg" alt={logo.alt} className="h-8 hidden dark:block" />
                     <span className="text-lg font-semibold">{logo.title}</span>
                   </a>
                 </SheetTitle>
@@ -139,8 +144,9 @@ const Navbar = ({
                     </div>
                   ))}
                 </Accordion>
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-row gap-3 items-center">
                   <GitHubStarButton />
+                  <ThemeToggle />
                 </div>
               </div>
             </SheetContent>
